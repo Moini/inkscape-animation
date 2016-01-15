@@ -3,6 +3,7 @@ import copy
 import os
 import inkex
 import subprocess
+import logging
 
 # create new bw rectangle ( w*h ) in specified layer, centered to document, if needed;
 def create_rect( layer, w, h, docw, doch, center ):

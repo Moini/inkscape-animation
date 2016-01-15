@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension>
+	<_name>Add frame</_name>
+	<id>id.knd.iaps.newframe</id>
+	<dependency type="executable" location="extensions">iaps_newframe.py</dependency>
+	<effect needs-live-preview="false">
+		<object-type>all</object-type>
+		<effects-menu>
+			<submenu _name="Animation" />
+		</effects-menu>
+	</effect>
+	<script>
+		<command reldir="extensions" interpreter="python">iaps_newframe.py</command>
+	</script>
+</inkscape-extension>

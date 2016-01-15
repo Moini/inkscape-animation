@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension>
+	<_name>New animation</_name>
+	<id>id.knd.iaps.newanim</id>
+	<dependency type="executable" location="extensions">iaps_newanim.py</dependency>
+	<param name="help" type="description">Create a new layer group for new animation sequence.</param>
+	<param name="name" type="string" _gui-text="New anim name">newAnim</param>
+	<param name="width" type="int" min="1" max="900" _gui-text="Width">350</param>
+	<param name="height" type="int" min="1" max="900" _gui-text="Height">350</param>
+	<effect needs-live-preview="false">
+		<object-type>all</object-type>
+		<effects-menu>
+			<submenu _name="Animation" />
+		</effects-menu>
+	</effect>
+	<script>
+		<command reldir="extensions" interpreter="python">iaps_newanim.py</command>
+	</script>
+</inkscape-extension>

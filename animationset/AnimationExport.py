@@ -60,17 +60,28 @@ class AnimationExport(object):
 					logging.debug("Created '" + path + "'")
 
 	def get_animation_top_layer( self, layer ):
+		if None == layer:
+			if self.debug:
+				logging.debug("Received NULL layer\n")
+			return None
 		current_id = layer.get('id')
 		top_layer = None
 		if -1 != current_id.find('anim_'):
 			top_layer = layer
 		if -1 != current_id.find('frame_'):
 			top_layer = layer.getparent()
+		if None == top_layer:
+			if self.debug:
+				logging.debug("Unable to locate top layer for selected animation.")
 		###assert top_layer is None
 		return top_layer
 
 	def get_animation_name( self ):
 		#assert self.top_layer is None
+		if None == self.top_layer:
+			if self.debug:
+				logging.debug("Received NULL layer\n")
+			return None
 		raw_name = self.top_layer.get('id')
 		clean_name = raw_name[ raw_name.find('_')+1:]
 		return clean_name

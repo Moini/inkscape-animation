@@ -14,8 +14,11 @@
 	<param name="rate" type="int" min="1" max="5000" _gui-text="GIFs framerate,ms">100</param>
 	<param name="sprite" type="boolean" _gui-text="Build a spritesheet with JSON markup">true</param>
 	<param name="spritename" type="string" _gui-text="Spritesheet name">Sprite</param>
-	<param name="texturew" type="int" min="0" max="4096" _gui-text="Maximum sheet texture width, px">1024</param>
-	<param name="textureh" type="int" min="0" max="4096" _gui-text="Maximum sheet texture height, px">1024</param>
+	<!-- <param name="texturew" type="int" min="0" max="4096" _gui-text="Maximum sheet texture width, px">1024</param>
+	<param name="textureh" type="int" min="0" max="4096" _gui-text="Maximum sheet texture height, px">1024</param> -->
+
+	<param name="framesx" type="int" min="1" max="256" _gui-text="Number of frames along X axis"> 8 </param>
+	<param name="framesy" type="int" min="1" max="256" _gui-text="Number of frames along Y axis"> 8 </param>
 	<param name="debug" type="boolean" _gui-text="Make log">true</param>
 
 	<effect needs-live-preview="false">

@@ -6,13 +6,20 @@ from sys import platform as _platform
 from RegionData import RegionData
 
 class SpritesheetMaker( object ):
-	def __init__(self, fq_filepath, region_paths, w, h, tex_w, tex_h, debug = False ):
+
+	""" generate spritesheet from specified region paths, using single sprite size w*h, 
+		creating texture tex_w*tex*h
+	"""
+	#def __init__(self, fq_filepath, region_paths, w, h, tex_w, tex_h, debug = False ):
+	def __init__(self, fq_filepath, region_paths, w, h, frames_x, frames_y, debug = False ):
 		self.path = fq_filepath
 		self.region_paths = region_paths
 		self.w = w
 		self.h = h
-		self.texture_w = tex_w
-		self.texture_h = tex_h
+		#self.texture_w = tex_w
+		#self.texture_h = tex_h
+		self.frames_x = frames_x
+		self.frames_y = frames_y
 		self.debug = debug
 		num = 0
 		for s in region_paths:
@@ -20,13 +27,13 @@ class SpritesheetMaker( object ):
 		# overall number of frames
 		self.size = num
 		# columns num
-		self.n = self.texture_w // self.w 
+		#self.n = self.texture_w // self.w 
 		# rows num
-		self.m = self.size // self.n + 1
+		#self.m = self.size // self.n + 1
 		# output info
 		if self.debug:
 			logging.debug('Obtained ' + str( self.size ) + ' frames \n' )
-			logging.debug( 'Will use ' + str( self.n ) + 'x' + str( self.m ) + ' tileset\n' )
+			logging.debug( 'Will use ' + str( self.frames_x ) + 'x' + str( self.frames_y ) + ' tileset\n' )
 
 	# compose spritesheet image from given files
 	def make_spritesheet( self ):
@@ -34,7 +41,9 @@ class SpritesheetMaker( object ):
 		for r in self.region_paths:
 			for p in r:
 				cmd = cmd + (p, )
-		cmd = cmd + ('-tile', str( self.n ) + 'x' + str( self.m + 1 ), '-geometry',\
+		#cmd = cmd + ('-tile', str( self.n ) + 'x' + str( self.m + 1 ), '-geometry',\
+		#		str(self.w) +'x'+str(self.h) +':0:0','-background', 'transparent', self.path )
+		cmd = cmd + ('-tile', str( self.frames_x ) + 'x' + str( self.frames_y + 1 ), '-geometry',\
 				str(self.w) +'x'+str(self.h) +':0:0','-background', 'transparent', self.path )
 		if self.debug:
 			logging.debug( "Sprite assembly cmd:" + str( cmd ) + '\n' )
@@ -59,8 +68,10 @@ class SpritesheetMaker( object ):
 				else:
 					name = p[ p.rfind('/') + 1: ]
 				name = name[ :name.rfind('.png') ]
-				y = ( i // self.n ) 
-				x = ( i - y * self.n ) * self.w
+				#y = ( i // self.n ) 
+				#x = ( i - y * self.n ) * self.w
+				y = ( i // self.frames_x ) 
+				x = ( i - y * self.frames_x ) * self.w
 				y = y * self.h
 				r_data = RegionData( name, x, y, self.w, self.h )
 				json = '\t\t' + r_data.to_json() + ',\n'

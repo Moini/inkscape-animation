@@ -26,8 +26,10 @@ class IAPS_ExportAnimBatch( inkex.Effect ):
 		# spritesheet options
 		self.OptionParser.add_option("--spritename",action="store",type="string",dest="sprite_name",default="Sprite",help="")
 		self.OptionParser.add_option("--sprite",action="store",type="inkbool",dest="make_sprite",default="True",help="")
-		self.OptionParser.add_option("--texturew",action="store",type="int",dest="texture_w",default="1024",help="")
-		self.OptionParser.add_option("--textureh",action="store",type="int",dest="texture_h",default="1024",help="")
+		#self.OptionParser.add_option("--texturew",action="store",type="int",dest="texture_w",default="1024",help="")
+		#self.OptionParser.add_option("--textureh",action="store",type="int",dest="texture_h",default="1024",help="")
+		self.OptionParser.add_option("--framesx",action="store",type="int",dest="frames_x",default="8",help="")
+		self.OptionParser.add_option("--framesy",action="store",type="int",dest="frames_y",default="8",help="")
 		# debug mode 
 		self.OptionParser.add_option("--debug",action="store",type="inkbool",dest="debug",default="False",help="")
 
@@ -44,8 +46,10 @@ class IAPS_ExportAnimBatch( inkex.Effect ):
 		#retrieve sprite creation options
 		make_sprite = self.options.make_sprite
 		sprite_name = self.options.sprite_name
-		texture_w = self.options.texture_w
-		texture_h = self.options.texture_h
+		#texture_w = self.options.texture_w
+		#texture_h = self.options.texture_h
+		frames_x = self.options.frames_x
+		frames_y = self.options.frames_y
 
 		# get document root
 		root = self.document.getroot()
@@ -91,7 +95,8 @@ class IAPS_ExportAnimBatch( inkex.Effect ):
 		if self.options.debug:
 			logging.debug( 'Using sprite sheet path: ' + fq_sprite_path + '\n' )
 			logging.debug( 'Using json markup path: ' + fq_json_path + '\n' )
-		s_maker = SpritesheetMaker( fq_sprite_path, regionPaths, frame_w, frame_h, texture_w, texture_h, self.options.debug )
+		#s_maker = SpritesheetMaker( fq_sprite_path, regionPaths, frame_w, frame_h, texture_w, texture_h, self.options.debug )
+		s_maker = SpritesheetMaker( fq_sprite_path, regionPaths, frame_w, frame_h, frames_x, frames_y, self.options.debug )
 		s_maker.make_spritesheet()
 		regions_markup = s_maker.make_markup()
 		# create json data

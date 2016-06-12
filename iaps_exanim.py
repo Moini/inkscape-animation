@@ -15,6 +15,7 @@ class IAPS_ExportAnim( inkex.Effect ):
 		self.OptionParser.add_option("--path",action="store",type="string",dest="path",default=".",help="")
 		self.OptionParser.add_option("--gif",action="store",type="inkbool",dest="make_gif",default="True",help="")
 		self.OptionParser.add_option("--rate",action="store",type="int",dest="gif_rate",default="50",help="")
+		self.OptionParser.add_option("--export_bg",action="store",type="inkbool",dest="export_bg",default="True",help="")
 		# debug mode 
 		self.OptionParser.add_option("--debug",action="store",type="inkbool",dest="debug",default="False",help="")
 
@@ -26,8 +27,9 @@ class IAPS_ExportAnim( inkex.Effect ):
 		path = self.options.path
 		make_gif = self.options.make_gif
 		gif_rate = self.options.gif_rate
+		export_bg = self.options.export_bg
 		# export using AnimationExport class
-		a = AnimationExport( self, self.current_layer, path, make_gif, gif_rate, frame_w, frame_h, use_frame_wh, self.options.debug )
+		a = AnimationExport( self, self.current_layer, path, make_gif, gif_rate, frame_w, frame_h, use_frame_wh, export_bg, self.options.debug )
 		a.export()
 
 def _main():

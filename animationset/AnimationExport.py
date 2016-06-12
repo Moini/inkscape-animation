@@ -21,7 +21,7 @@ class AnimationExportData( object ):
 
 class AnimationExport(object):
 
-	def __init__(self, effect, layer, path, make_gif = True, gif_rate=100, arg_w = 320, arg_h = 320, use_arg_dimensions = False, debug = False ):
+	def __init__(self, effect, layer, path, make_gif = True, gif_rate=100, arg_w = 320, arg_h = 320, use_arg_dimensions = False, export_bg = True, debug = False ):
 		self.effect = effect
 		self.path = path
 		self.make_gif = make_gif
@@ -46,6 +46,7 @@ class AnimationExport(object):
 		self.arg_w = arg_w
 		self.arg_h = arg_h
 		self.use_arg_dimensions = use_arg_dimensions
+		self.export_bg = export_bg
 		self.frames = self.get_animation_frames()
 		self.defs = self.get_svg_defs()
 
@@ -147,6 +148,7 @@ class AnimationExport(object):
 		uh = self.geom['uh']
 		exRegionNames = list()
 		exRegionPaths = list()
+
 		# go through all frames
 		for frame in self.frames:
 			# export to svg
@@ -169,7 +171,12 @@ class AnimationExport(object):
 			new_svg.write('sodipodi:docname="' + name + '.svg">\n')
 			if None != self.defs:
 				new_svg.write( inkex.etree.tostring( self.defs ) + '\n' )
-			new_svg.write( inkex.etree.tostring( layer ) + '\n' + '</svg>\n')
+			
+			bg_layer = ""
+			if self.export_bg:
+                                bg_layer += inkex.etree.tostring(self.get_bg_layer())+'\n'
+			
+			new_svg.write(bg_layer + inkex.etree.tostring( layer ) + '\n' + '</svg>\n')
 			new_svg.close()
 			# make exported layer invisible
 			layer.set('style','opacity:1.0;display:none')
@@ -189,9 +196,14 @@ class AnimationExport(object):
 			msg = p.communicate()
 			if self.debug:
 				logging.debug( str(cmd) + "\n" )
-		# make first frame layer visible
-		first_layer = self.frames[0].layer
-		first_layer.set('style','opacity:1.0;display:inline')
+		
+		# restore layer transparency
+		for frame in self.frames:
+                    frame.layer.set('style','opacity:0.25;display:inline')
+		
+		# make last frame layer fully visible again
+		last_layer = self.frames[-1].layer
+		last_layer.set('style','opacity:1.0;display:inline')
 		# prepare json data
 		exportData = AnimationData( self.name, 150, exRegionNames )
 
@@ -203,19 +215,19 @@ class AnimationExport(object):
 			else: # assume Linux or MacOS
 				outfile_gif = self.gif_path + '/' + self.name + '.gif'
 
-			# obtain common info
-			numframes = len(self.frames)
-			files_regex = 'frame_' + self.name + '_[1-' + str(numframes) + '].png'
-
-			# create regular expression for all the png files
+			## create path name for all the png files
 			if "win32" == _platform:
-				png_regex = self.png_path + '\\' + files_regex
+				png_path = self.png_path + '\\'
 			else:
-				png_regex = self.png_path + '/' + files_regex
+				png_path = self.png_path + '/'
+			
 			# calc rate in a form appropriate for 'convert' tool
 			r = self.gif_rate / 10
+			
 			# GIF creation command
-			cmd = ('convert','-delay',str(r),'-dispose','2', png_regex, outfile_gif )
+			framelist = [png_path+frame.name+'.png' for frame in self.frames]
+			cmd = tuple(['convert','-delay', str(r),'-dispose','Previous'] + framelist + [outfile_gif])
+
 			if "win32" == _platform:
 				p = subprocess.Popen( cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, shell = True )
 			else:

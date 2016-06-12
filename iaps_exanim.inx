@@ -9,6 +9,7 @@
 	<param name="frameh" type="int" min="1" max="1024"  _gui-text="Frame height, px">320</param>
 	<param name="path" type="string"  _gui-text="export directory path">.</param>
 	<param name="gif" type="boolean" _gui-text="also make GIF">true</param>
+        <param name="export_bg" type="boolean" _gui-text="Export background">true</param>
 	<param name="rate" type="int" min="1" max="5000" _gui-text="GIF framerate,ms">100</param>
 	<param name="debug" type="boolean" _gui-text="Make log">true</param>
 
